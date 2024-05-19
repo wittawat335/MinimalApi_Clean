@@ -7,7 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Books\Commands\CreateBook\" />
+    <Folder Include="Books\Commands\DeleteBook\" />
+    <Folder Include="Books\Commands\UpdateBook\" />
+    <Folder Include="Books\Queries\GetBooks\" />
+    <Folder Include="Books\Queries\GetBookById\" />
     <Folder Include="DTOs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
   </ItemGroup>
 
 </Project>
