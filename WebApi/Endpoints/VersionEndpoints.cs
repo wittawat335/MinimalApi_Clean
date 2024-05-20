@@ -10,10 +10,22 @@ namespace WebApi.Endpoints
                 .WithTags("version")
                 .WithOpenApi();
 
+            _ = root.MapGet("/", GetVersion);
         
             return app;
         }
 
-       
+        public static async Task<IResult> GetVersion(IMediator mediator)
+        {
+            try
+            {
+                return Results.Ok("ok");
+            }
+            catch (Exception ex)
+            {
+                return Results.Problem(ex.StackTrace, ex.Message, StatusCodes.Status500InternalServerError);
+            }
+        }
+
     }
 }

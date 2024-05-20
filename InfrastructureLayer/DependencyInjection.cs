@@ -9,7 +9,7 @@ namespace InfrastructureLayer
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<LibraryDbContext>(opt =>
+            _ = services.AddDbContext<LibraryDbContext>(opt => 
             {
                 opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")
                    ?? throw new InvalidOperationException("Connection string not found"),
@@ -21,6 +21,8 @@ namespace InfrastructureLayer
                        errorNumbersToAdd: null);
                    });
             });
+
+
 
             return services;
         }

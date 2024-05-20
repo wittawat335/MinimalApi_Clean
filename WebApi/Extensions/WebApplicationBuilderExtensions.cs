@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using InfrastructureLayer;
+using ApplicationLayer;
 using Serilog;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace WebApi.Extensions
 {
@@ -55,29 +57,14 @@ namespace WebApi.Extensions
             _ = builder.Services.AddEndpointsApiExplorer();
             _ = builder.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1",
-                    new OpenApiInfo
-                    {
-                        Version = "v1",
-                        Title = $"DemoMinimalApiClean API - {ti.ToTitleCase(builder.Environment.EnvironmentName)}",
-                        Description = "An example to share an implementation of Minimal API in .NET 6.",
-                        Contact = new OpenApiContact
-                        {
-                            Name = "DemoMinimalApiClean API",
-                            Email = "demominimalapiclean@stphnwlsh.dev",
-                            Url = new Uri("https://github.com/stphnwlsh/demominimalapiclean")
-                        },
-                        License = new OpenApiLicense
-                        {
-                            Name = "DemoMinimalApiClean API - License - MIT",
-                            Url = new Uri("https://opensource.org/licenses/MIT")
-                        },
-                        TermsOfService = new Uri("https://github.com/stphnwlsh/demominimalapiclean")
-                    });
-
-                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-
-                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+                options.OperationFilter<SecurityRequirementsOperationFilter>();
+                //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
                 options.DocInclusionPredicate((name, api) => true);
             });
 
@@ -92,7 +79,7 @@ namespace WebApi.Extensions
             #region Project Dependencies
 
             _ = builder.Services.AddInfrastructure(builder.Configuration);
-            //_ = builder.Services.AddApplication();
+            _ = builder.Services.AddApplication();
 
             #endregion Project Dependencies
 
